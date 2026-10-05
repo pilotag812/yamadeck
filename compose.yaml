@@ -1,0 +1,19 @@
+services:
+  yamaha:
+    build: .
+    ports:
+      - "${WEB_PORT:-8095}:8080"
+    environment:
+      RECEIVER_HOST: ${RECEIVER_HOST:-192.168.1.132}
+      MAX_VOLUME_DB: ${MAX_VOLUME_DB:--10}
+      DATA_DIR: /data
+    volumes:
+      - radio-data:/data
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  radio-data:
