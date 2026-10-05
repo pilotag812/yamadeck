@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121411">
+  <title>Yamaha · домашний звук</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="brand" href="/" aria-label="Yamaha, главная">YAMAHA<span>HOME AUDIO</span></a>
+      <div class="header-actions"><div class="connection"><span id="connection-dot" class="dot"></span><span id="connection">Подключение…</span></div><button id="settings-open" aria-haspopup="dialog">⚙ Настройки</button></div>
+    </header>
+    <div class="intro"><div><p class="eyebrow">ВАШ ДОМАШНИЙ ЗВУК</p><h1>Всё под контролем.</h1></div><div class="device"><b id="model">Yamaha RX-V575</b><span id="host">Поиск соединения</span></div></div>
+    <div id="error" role="alert" hidden></div>
+    <div class="dashboard">
+      <div class="left-column">
+      <section class="panel volume-panel" aria-labelledby="volume-title">
+        <div class="panel-heading"><h2 id="volume-title">Громкость</h2><span class="zone">MAIN ZONE</span></div>
+        <div class="dial"><div class="dial-inner"><span id="power-state">ОЖИДАНИЕ</span><div class="volume-number"><output id="volume-value">—</output><span>dB</span></div><span id="current-input">—</span></div></div>
+        <div class="volume-buttons"><button id="quieter" data-control aria-label="Уменьшить громкость на 1 dB">−</button><button id="mute" data-control aria-pressed="false">Без звука</button><button id="louder" data-control aria-label="Увеличить громкость на 1 dB">+</button></div>
+        <label class="sr-only" for="volume">Громкость в децибелах</label><input id="volume" data-control type="range" min="-80.5" max="-10" step="0.5" value="-56">
+        <div class="range-labels"><span>−80.5 dB</span><span id="volume-limit">До −10 dB</span></div>
+        <div class="volume-presets" role="group" aria-label="Пресеты громкости">
+          <button data-control data-action="volume" data-volume-preset="-75" aria-pressed="false">−75 dB</button><button data-control data-action="volume" data-volume-preset="-60" aria-pressed="false">−60 dB</button><button data-control data-action="volume" data-volume-preset="-45" aria-pressed="false">−45 dB</button><button data-control data-action="volume" data-volume-preset="-30" aria-pressed="false">−30 dB</button><button data-control data-action="volume" data-volume-preset="-15" aria-pressed="false">−15 dB</button>
+        </div>
+        <button id="power" class="power-button" data-control><span aria-hidden="true">⏻</span><span id="power-label">Включить ресивер</span></button>
+      </section>
+      <section class="panel sound-panel" aria-labelledby="sound-title">
+        <div class="panel-heading"><h2 id="sound-title">Характер звука</h2><span class="quiet">DSP & TONE</span></div>
+        <div class="sound-grid">
+          <div><label for="program">Звуковая программа</label><select id="program" data-control><option>Загрузка…</option></select><div class="toggles"><button id="straight" data-control aria-pressed="false">Straight</button><button id="enhancer" data-control aria-pressed="false">Enhancer</button><button id="direct" data-control aria-pressed="false">Direct</button><button id="drc" data-control aria-pressed="false">Adaptive DRC</button></div><p class="hint" id="sound-hint">Straight воспроизводит звук без DSP-обработки.</p></div>
+          <div class="tone"><label for="bass">Низкие частоты <output id="bass-value">—</output></label><input id="bass" data-control type="range" min="-6" max="6" step="0.5" value="0"><label for="treble">Высокие частоты <output id="treble-value">—</output></label><input id="treble" data-control type="range" min="-6" max="6" step="0.5" value="0"></div>
+        </div>
+      </section>
+      <section class="panel timer-panel"><div class="panel-heading"><h2>Таймер сна</h2></div><label for="sleep">Таймер выключения</label><select id="sleep" data-control><option value="Off">Выключен</option><option value="30 min">Через 30 минут</option><option value="60 min">Через 60 минут</option><option value="90 min">Через 90 минут</option><option value="120 min">Через 120 минут</option></select></section>
+      </div>
+      <div class="sources-column">
+        <section class="panel" aria-labelledby="inputs-title"><div class="panel-heading"><h2 id="inputs-title">Источник звука</h2><span id="input-count" class="quiet">—</span></div><p id="config-message" class="hint" role="status">Загрузка входов и сцен…</p><div id="inputs" class="inputs"></div></section>
+        <section class="panel scenes-panel" aria-labelledby="scenes-title"><div class="panel-heading"><h2 id="scenes-title">Сцены</h2><span class="quiet">Одно нажатие</span></div><div id="scenes" class="scenes"></div></section>
+      </div>
+      <aside class="right-column" aria-label="Управление выбранным источником">
+      <section id="tuner-panel" class="panel" aria-labelledby="tuner-title" hidden>
+        <div class="panel-heading"><h2 id="tuner-title">Радио / тюнер</h2><span class="quiet">FM / AM</span></div>
+        <div class="tuner-display"><span id="tuner-signal" class="eyebrow">ЗАГРУЗКА…</span><div class="tuner-reading"><output id="tuner-frequency-value">—</output><span id="tuner-unit">MHz</span></div><h3 id="tuner-station">Радиостанция</h3><p id="tuner-text" class="quiet"></p></div>
+        <p id="tuner-message" class="hint" role="status">Загрузка тюнера…</p>
+        <div class="tuner-row tuner-row-frequency">
+          <div class="tuner-bands" role="group" aria-label="Диапазон"><button data-tuner-control data-tuner-band="FM" aria-pressed="false">FM</button><button data-tuner-control data-tuner-band="AM" aria-pressed="false">AM</button></div>
+          <form id="tuner-frequency-form"><label class="sr-only" for="tuner-frequency">Частота</label><div class="tuner-tuning"><button type="button" data-tuner-control data-tuner-step="-1" aria-label="Уменьшить частоту">−</button><input id="tuner-frequency" data-tuner-control type="number" min="87.5" max="108" step="0.05" required><button type="button" data-tuner-control data-tuner-step="1" aria-label="Увеличить частоту">+</button><button data-tuner-control type="submit" aria-label="Настроить частоту" title="Настроить частоту"><span class="tuner-button-text">Настроить</span><span class="tuner-button-icon" aria-hidden="true">✓</span></button></div></form>
+          <div class="tuner-search" role="group" aria-label="Автопоиск радиостанций"><button data-tuner-control data-tuner-search="Down" aria-label="Поиск радиостанции вниз" title="Поиск вниз">←<span class="tuner-button-text"> Поиск</span></button><button data-tuner-control data-tuner-search="Cancel" aria-label="Остановить поиск" title="Остановить поиск"><span class="tuner-button-text">Стоп</span><span class="tuner-button-icon" aria-hidden="true">■</span></button><button data-tuner-control data-tuner-search="Up" aria-label="Поиск радиостанции вверх" title="Поиск вверх"><span class="tuner-button-text">Поиск </span>→</button></div>
+        </div>
+        <div class="tuner-row tuner-row-presets"><label class="sr-only" for="tuner-preset">Сохранённые станции</label><select id="tuner-preset" data-tuner-control><option value="">Загрузка…</option></select><div class="tuner-presets-nav"><button data-tuner-control data-tuner-preset="Down" aria-label="Предыдущая сохранённая станция" title="Предыдущая станция">←<span class="tuner-button-text"> Предыдущая</span></button><button data-tuner-control data-tuner-preset="Up" aria-label="Следующая сохранённая станция" title="Следующая станция"><span class="tuner-button-text">Следующая </span>→</button></div></div>
+        <p id="tuner-presets-message" class="hint" role="status"></p>
+      </section>
+      <section id="server-panel" class="panel server-panel" aria-labelledby="server-title" hidden>
+        <div class="panel-heading"><h2 id="server-title">Медиасервер</h2><span class="quiet">SERVER / DLNA</span></div>
+        <div class="server-player"><div><span id="server-play-state" class="eyebrow">ОСТАНОВЛЕНО</span><h3 id="server-song">Нет выбранного трека</h3><p id="server-meta" class="quiet"></p></div><div class="playback-controls"><button data-server-playback="Skip Rev" data-server-control aria-label="SERVER: предыдущий трек">⏮</button><button data-server-playback="Play" data-server-control aria-label="SERVER: воспроизвести">▶</button><button data-server-playback="Pause" data-server-control aria-label="SERVER: пауза">Ⅱ</button><button data-server-playback="Stop" data-server-control aria-label="SERVER: остановить">■</button><button data-server-playback="Skip Fwd" data-server-control aria-label="SERVER: следующий трек">⏭</button></div></div>
+        <div class="server-modes"><label for="server-repeat">Повтор</label><select id="server-repeat" data-server-control><option value="Off">Выключен</option><option value="One">Один трек</option><option value="All">Все треки</option></select><button id="server-shuffle" data-server-control aria-pressed="false">Случайный порядок</button></div>
+        <div class="server-navigation"><button id="server-home" data-server-control>К серверам</button><button id="server-back" data-server-control>← Назад</button><h3 id="server-folder">Медиасерверы</h3></div>
+        <p id="server-message" class="hint" role="status">Загрузка списка…</p>
+        <div id="server-list" class="server-list" role="region" tabindex="0" aria-label="Содержимое медиасервера"></div>
+        <p id="server-count" class="quiet server-count" aria-live="polite"></p>
+      </section>
+
+      <section id="source-panel" class="panel" aria-labelledby="source-title"><div class="panel-heading"><h2 id="source-title">Управление источником</h2><span id="source-name" class="quiet">—</span></div><div id="generic-playback" class="playback-controls"><button data-playback="Skip Rev" data-control aria-label="Предыдущий трек">⏮</button><button data-playback="Play" data-control aria-label="Воспроизвести">▶</button><button data-playback="Pause" data-control aria-label="Пауза">Ⅱ</button><button data-playback="Stop" data-control aria-label="Остановить">■</button><button data-playback="Skip Fwd" data-control aria-label="Следующий трек">⏭</button></div><p id="source-message" class="hint"></p></section>
+            </aside>
+    </div>
+    <footer><span>YAMAHA <span class="footer-separator">/</span> LOCAL CONTROL</span><span id="last-update" aria-live="polite">Подключаемся к ресиверу…</span><button id="refresh">Обновить ↻</button></footer>
+  </main>
+  <dialog id="settings-dialog" aria-labelledby="settings-title">
+    <form id="settings-form">
+      <div class="panel-heading"><h2 id="settings-title">Настройки</h2><button id="settings-close" type="button" aria-label="Закрыть настройки">×</button></div>
+      <label for="settings-host">IP адрес ресивера</label><input id="settings-host" type="text" placeholder="192.168.1.132" required maxlength="80" autocomplete="off" spellcheck="false">
+      <fieldset><legend>Источники на главной панели</legend><p class="hint">Отметьте источники, которыми пользуетесь.</p><div id="settings-inputs" class="settings-inputs"></div><p id="settings-inputs-message" class="hint"></p></fieldset>
+      <p id="settings-error" role="alert" hidden></p>
+      <div class="settings-actions"><button id="settings-cancel" type="button">Отмена</button><button id="settings-save" type="submit">Сохранить</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
